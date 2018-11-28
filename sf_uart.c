@@ -5,7 +5,7 @@
  *      Author: Andrey Gramakov
  */
 
-#include "uart_tools.h"
+#include <sf_uart.h>
 
 UART_HandleTypeDef uart1;
 
@@ -84,7 +84,7 @@ static void UART1_ActionOnGettingAByte()
 
 }
 
-void UART_Init(int baud)
+void SF_UartInit(int baud)
 {
     __HAL_RCC_USART1_CLK_ENABLE()
                 ;

@@ -6,12 +6,12 @@
  */
 
 
-#include "ir_remote_sensor.h"
+#include <sf_ir_remote_sensor.h>
 
-void IR_Init(IrRemote_Typedef* ir)
+void SF_IrIInit(IrRemote_Typedef* ir)
 {
-    Util_InitTicksCounter();
-    Util_InitGpioClock(ir->in_port);
+    SF_InitDelay_us();
+    SF_InitGpioClock(ir->in_port);
     //
     GPIO_InitTypeDef g;
     g.Mode = GPIO_MODE_INPUT;
@@ -23,7 +23,7 @@ void IR_Init(IrRemote_Typedef* ir)
     ir->rx_byte_counter = 0;
 }
 
-uint8_t IR_GetByte(IrRemote_Typedef* ir)
+uint8_t SF_IrGetByte(IrRemote_Typedef* ir)
 {
     uint8_t byte = 0;
     volatile bool bit = false;
@@ -31,7 +31,7 @@ uint8_t IR_GetByte(IrRemote_Typedef* ir)
     {
         bit = HAL_GPIO_ReadPin(ir->in_port, ir->in_pin);
         byte |= ( bit << b );
-        Util_Delay_us(IR_PERIOD_us);
+        SF_Delay_us(IR_PERIOD_us);
     }
     ir->rx_array[ir->rx_byte_counter] = byte;
     return byte;

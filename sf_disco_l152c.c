@@ -5,15 +5,14 @@
  *      Author: Andrey Gramakov
  */
 
+#include <sf_disco_l152c.h>
 
-#include "disco_l152c.h"
-
-
-void Disco_InitLeds()
+void SF_Disco_InitLeds()
 {
-    __HAL_RCC_GPIOB_CLK_ENABLE();
+    __HAL_RCC_GPIOB_CLK_ENABLE()
+    ;
     GPIO_InitTypeDef leds_gpio;
-    uint32_t pins = GPIO_PIN_6|GPIO_PIN_7;
+    uint32_t pins = GPIO_PIN_BLUE | GPIO_PIN_GREEN;
     leds_gpio.Pin = pins;
     leds_gpio.Mode = GPIO_MODE_OUTPUT_PP;
     leds_gpio.Pull = GPIO_PULLUP;
@@ -31,10 +30,20 @@ void Disco_InitLeds()
 
 void Green(bool state)
 {
-    HAL_GPIO_WritePin(GPIOB, GPIO_PIN_7, state);
+    HAL_GPIO_WritePin(GPIOB, GPIO_PIN_GREEN, state);
 }
 
 void Blue(bool state)
 {
-    HAL_GPIO_WritePin(GPIOB, GPIO_PIN_6, state);
+    HAL_GPIO_WritePin(GPIOB, GPIO_PIN_BLUE, state);
+}
+
+void BlueToggle()
+{
+    HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_BLUE);
+}
+
+void GreenToggle()
+{
+    HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_GREEN);
 }

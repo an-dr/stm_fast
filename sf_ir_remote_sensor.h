@@ -5,12 +5,12 @@
  *      Author: Andrey Gramakov
  */
 
-#ifndef IR_REMOTE_SENSOR_H_
-#define IR_REMOTE_SENSOR_H_
+#ifndef SF_IR_REMOTE_SENSOR_H_
+#define SF_IR_REMOTE_SENSOR_H_
 
-#include "main.h"
 #include <stdbool.h>
-#include "st_utils.h"
+#include "main.h"
+#include "sf_utils.h"
 
 #define IR_CLK 38000
 #define IR_PERIOD_us (1000000/IR_CLK)
@@ -22,8 +22,8 @@ typedef struct{
     uint32_t rx_byte_counter;
 } IrRemote_Typedef;
 
-void IR_Init(IrRemote_Typedef* ir);
-uint8_t IR_GetByte(IrRemote_Typedef* ir);
-void IR_WaitNGet(IrRemote_Typedef* ir);
+void SF_IrIInit(IrRemote_Typedef* ir);
+uint8_t SF_IrGetByte(IrRemote_Typedef* ir);
+void SF_IrWaitNGet(IrRemote_Typedef* ir);
 
-#endif /* IR_REMOTE_SENSOR_H_ */
+#endif /* SF_IR_REMOTE_SENSOR_H_ */

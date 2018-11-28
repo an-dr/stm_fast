@@ -21,7 +21,7 @@ typedef struct UART1_rcvStruct{
     bool rcv_complete;
 }U1_rcv_Typedef;
 
-void UART_Init(int baud);
+void SF_UartInit(int baud);
 void out(char* str);
 void out_i(int i);
 void outl(char* str);
