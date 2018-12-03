@@ -8,14 +8,20 @@
 #ifndef SF_UTILS_H_
 #define SF_UTILS_H_
 
+#ifdef __cplusplus
+ extern "C" {
+#endif
+
 #include <stdint.h>
 #include "main.h"
 
-void SF_InitGpioClock(GPIO_TypeDef* gpio);
-void SF_EnableClock(uint32_t* PERIPH_ADDR_BASE);
-void SF_InitDelay_us();
-void SF_Delay_us(uint32_t us);
-uint32_t SF_GetUpTime_us();
-uint32_t SF_GetUpTime_ms();
 
+void SF_InitGpioClock(GPIO_TypeDef* gpio); // TODO: remove this
+void SF_EnableClock(uint32_t* PERIPH_ADDR_BASE);
+uint32_t SF_GetArrAverage(uint32_t* array, uint32_t arr_size);
+uint32_t SF_LinInterp(uint32_t x, uint32_t x0, uint32_t y0, uint32_t x1, uint32_t y1);
 #endif /* SF_UTILS_H_ */
+
+#ifdef __cplusplus
+}
+#endif /* __cplusplus */
