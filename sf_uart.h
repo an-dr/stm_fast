@@ -7,6 +7,11 @@
 
 #ifndef UART_TOOLS_H
 #define UART_TOOLS_H
+/*                   */
+#ifdef __cplusplus
+ extern "C" {
+#endif
+/*                   */
 #include <stdint.h>
 #include <stdlib.h>
 #include <stdbool.h>
@@ -21,12 +26,16 @@ typedef struct UART1_rcvStruct{
     bool rcv_complete;
 }U1_rcv_Typedef;
 
-void SF_UartInit(int baud);
+void SF_Uart1Init(int baud);
 void out(char* str);
 void out_i(int i);
 void outl(char* str);
 void out_il(int i);
 void out_var(char* name, int value);
 
+/*                   */
+#ifdef __cplusplus
+}
+#endif /* __cplusplus */
 
 #endif /* UART_TOOLS_H */
