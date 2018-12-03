@@ -7,26 +7,29 @@
 
 #include <sf_timers.h>
 
-TIM_HandleTypeDef tim_handler;
+TIM_HandleTypeDef tim6_handler;
+int tim6_st_init_flag = false;
 
-void SF_TimerInit_Polling(TIM_TypeDef* timer2init, uint32_t reload_val,
-                            uint32_t prescaler)
+TIM_HandleTypeDef tim3_handler;
+TIM_IC_InitTypeDef tim3_ic_handler;
+
+void SF_TIM6Init_Polling(uint32_t reload_val, uint32_t prescaler)
 {
-    tim_handler.Instance = timer2init;
-    tim_handler.Init.ClockDivision = 1;
-    tim_handler.Init.CounterMode = TIM_COUNTERMODE_UP;
-    tim_handler.Init.Period = reload_val;
-    tim_handler.Init.Prescaler = prescaler;
-    SF_EnableClock((uint32_t*) tim_handler.Instance); //enable clock
+    tim6_handler.Instance = TIM6;
+    tim6_handler.Init.ClockDivision = 1;
+    tim6_handler.Init.CounterMode = TIM_COUNTERMODE_UP;
+    tim6_handler.Init.Period = reload_val;
+    tim6_handler.Init.Prescaler = prescaler;
+    SF_EnableClock((uint32_t*) tim6_handler.Instance); //enable clock
     //
-    HAL_TIM_Base_Init(&tim_handler);
-    HAL_TIM_Base_Start(&tim_handler);
+    HAL_TIM_Base_Init(&tim6_handler);
+    HAL_TIM_Base_Start(&tim6_handler);
 
 }
 
 static void EnableTimerIRQ(uint32_t* PERIPH_ADDR_BASE)
 {
-    switch ((uint32_t)PERIPH_ADDR_BASE)
+    switch ((uint32_t) PERIPH_ADDR_BASE)
     {
 #       ifdef TIM0_BASE
         case TIM0_BASE:
@@ -123,24 +126,71 @@ static void EnableTimerIRQ(uint32_t* PERIPH_ADDR_BASE)
     }
 }
 
-void SF_TimerInit_IT(TIM_TypeDef* timer2init, uint32_t reload_val,
-                       uint32_t prescaler)
+void SF_TIM6Init_IT(uint32_t reload_val, uint32_t prescaler)
 {
-    tim_handler.Instance = timer2init;
-    tim_handler.Init.ClockDivision = 1;
-    tim_handler.Init.CounterMode = TIM_COUNTERMODE_UP;
-    tim_handler.Init.Period = reload_val;
-    tim_handler.Init.Prescaler = prescaler;
-    SF_EnableClock((uint32_t*) tim_handler.Instance); //enable clock
-    EnableTimerIRQ((uint32_t*)tim_handler.Instance);
+    tim6_handler.Instance = TIM6;
+    tim6_handler.Init.ClockDivision = 1;
+    tim6_handler.Init.CounterMode = TIM_COUNTERMODE_UP;
+    tim6_handler.Init.Period = reload_val;
+    tim6_handler.Init.Prescaler = prescaler;
+    SF_EnableClock((uint32_t*) tim6_handler.Instance); //enable clock
+    EnableTimerIRQ((uint32_t*) tim6_handler.Instance);
     //
-    HAL_TIM_Base_Init(&tim_handler);
-    HAL_TIM_Base_Start_IT(&tim_handler);
+    HAL_TIM_Base_Init(&tim6_handler);
+    HAL_TIM_Base_Start_IT(&tim6_handler);
+}
+
+void SF_TIM3Init_IConPB4(uint32_t reload_val, uint32_t prescaler)
+{
+    // basic options
+    tim3_handler.Instance = TIM3;
+    tim3_handler.Init.ClockDivision = 1;
+    tim3_handler.Init.CounterMode = TIM_COUNTERMODE_UP;
+    tim3_handler.Init.Period = reload_val;
+    tim3_handler.Init.Prescaler = prescaler;
+
+    //ic config
+    tim3_ic_handler.ICFilter = 0;
+    tim3_ic_handler.ICPolarity = TIM_ICPOLARITY_FALLING;
+    tim3_ic_handler.ICPrescaler = TIM_ICPSC_DIV1;
+    tim3_ic_handler.ICSelection = TIM_ICSELECTION_DIRECTTI;
+
+    // gpio config for ic
+    GPIO_InitTypeDef gpio_ic;
+    gpio_ic.Alternate = GPIO_AF2_TIM3;
+    gpio_ic.Mode = GPIO_MODE_AF_PP;
+    gpio_ic.Pin = GPIO_PIN_4;
+
+    // clock and irq
+    __HAL_RCC_GPIOB_CLK_ENABLE()
+    ;
+    __HAL_RCC_TIM3_CLK_ENABLE()
+    ;
+    NVIC_EnableIRQ(TIM3_IRQn);
+//    EnableTimerIRQ((uint32_t*) tim3_handler.Instance);
+
+    // apply configs
+    HAL_GPIO_Init(GPIOB, &gpio_ic); // gpio
+    HAL_TIM_IC_Init(&tim3_handler);
+    HAL_TIM_IC_ConfigChannel(&tim3_handler, &tim3_ic_handler, TIM_CHANNEL_1);
+    HAL_TIM_IC_Start_IT(&tim3_handler, TIM_CHANNEL_1);
+    outl("TIM3 ready");
+}
+
+void TIM3_IRQHandler()
+{
+    HAL_TIM_IRQHandler(&tim3_handler);
+}
+
+__weak void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim)
+{
+    GreenToggle();
+//    while(1);
 }
 
 void TIM6_IRQHandler()
 {
-    HAL_TIM_IRQHandler(&tim_handler);
+    HAL_TIM_IRQHandler(&tim6_handler);
 }
 
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
