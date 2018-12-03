@@ -81,16 +81,12 @@ static void UART1_ActionOnGettingAByte()
     {
         u1r.array_buff[u1r.array_buff_cur++] = u1r.single_buf;
     }
-
 }
 
-void SF_UartInit(int baud)
+void SF_Uart1Init(int baud)
 {
-    __HAL_RCC_USART1_CLK_ENABLE()
-                ;
-    __HAL_RCC_GPIOA_CLK_ENABLE()
-                ;
-
+    __HAL_RCC_USART1_CLK_ENABLE();
+    __HAL_RCC_GPIOA_CLK_ENABLE();
     GPIO_InitTypeDef u1_pins;
     u1_pins.Pin = GPIO_PIN_9 | GPIO_PIN_10;
     u1_pins.Mode = GPIO_MODE_AF_PP;
@@ -100,7 +96,6 @@ void SF_UartInit(int baud)
     HAL_GPIO_Init(GPIOA, &u1_pins);
     HAL_NVIC_EnableIRQ(USART1_IRQn);
     HAL_NVIC_SetPriority(USART1_IRQn, 15, 0);
-
     uart1.Instance = USART1;
     uart1.Init.BaudRate = baud;
     uart1.Init.HwFlowCtl = UART_HWCONTROL_NONE;
@@ -110,14 +105,11 @@ void SF_UartInit(int baud)
     uart1.Init.StopBits = UART_STOPBITS_1;
     uart1.Init.WordLength = UART_WORDLENGTH_8B;
     HAL_UART_Init(&uart1);
-
     u1r.array_buff_cur = 0;
     HAL_UART_Receive_IT(&uart1, &u1r.single_buf, 1); // HAL_UART_RxCpltCallback will called every byte
-
     char* hello = "Hello, my developer!\n\r";
     HAL_UART_Transmit(&uart1, (uint8_t*) hello, strlen(hello), 1000);
 //    printf("Hello from printf");
-
 }
 
 void USART1_IRQHandler(void)
@@ -127,7 +119,6 @@ void USART1_IRQHandler(void)
     HAL_UART_Transmit(&uart1, (uint8_t*)msg, strlen(msg), 1000);
 #   endif
     HAL_UART_IRQHandler(&uart1); // check what's going on
-
 }
 
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
