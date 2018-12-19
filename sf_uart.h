@@ -9,29 +9,31 @@
 #define UART_TOOLS_H
 /*                   */
 #ifdef __cplusplus
- extern "C" {
+extern "C"
+{
 #endif
 /*                   */
 #include <stdint.h>
 #include <stdlib.h>
 #include <stdbool.h>
 #include <string.h>
-#include "main.h"
+#include "main.h" // hal
 
-typedef struct UART1_rcvStruct{
+typedef struct UART1_rcvStruct
+{
     uint8_t single_buf;
     uint8_t array_buff[128];
     uint32_t array_buff_cur;
     uint32_t last_msg_size;
     bool rcv_complete;
-}U1_rcv_Typedef;
+} U1_rcv_Typedef;
 
 void SF_Uart1Init(int baud);
-void out(char* str);
+void out(char const * str);
 void out_i(int i);
-void outl(char* str);
+void outl(char const * str);
 void out_il(int i);
-void out_var(char* name, int value);
+void out_var(char const * name, int value);
 
 /*                   */
 #ifdef __cplusplus

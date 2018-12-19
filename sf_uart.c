@@ -5,7 +5,7 @@
  *      Author: Andrey Gramakov
  */
 
-#include <sf_uart.h>
+#include "sf_uart.h"
 
 UART_HandleTypeDef uart1;
 
@@ -132,12 +132,12 @@ static void out_newlinechar()
     HAL_UART_Transmit(&uart1, (uint8_t*)"\n\r", strlen("\n\r"), 1000);
 }
 
-void out(char* str)
+void out(char const * str)
 {
     HAL_UART_Transmit(&uart1, (uint8_t*) str, strlen(str), 1000);
 }
 
-void outl(char* str)
+void outl(char const * str)
 {
     HAL_UART_Transmit(&uart1, (uint8_t*) str, strlen(str), 1000);
     out_newlinechar();
@@ -158,7 +158,7 @@ void out_il(int i)
     out_newlinechar();
 }
 
-void out_var(char* name, int value)
+void out_var(char const * name, int value)
 {
     out(name);
     out(": ");
