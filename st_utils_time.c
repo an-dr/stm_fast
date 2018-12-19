@@ -33,38 +33,38 @@ void SF_Delay_us_blocking(uint32_t us)
         ;
 }
 
-static uint32_t SearchPoint1(TimePoint_Typedef timescale[], uint32_t ts_size, uint32_t time)
-{
-    //search a points
-    uint32_t point_0 = 0; // first
-    while (point_0 < ts_size)
-    {
-        if (timescale[point_0].t > time)
-        {
-            return (point_0 + 1); // got point_b
-        }
-        ++point_0;
-    }
-    return point_0;
-}
+//static uint32_t SearchPoint1(TimePoint_Typedef timescale[], uint32_t ts_size, uint32_t time)
+//{
+//    //search a points
+//    uint32_t point_0 = 0; // first
+//    while (point_0 < ts_size)
+//    {
+//        if (timescale[point_0].t > time)
+//        {
+//            return (point_0 + 1); // got point_b
+//        }
+//        ++point_0;
+//    }
+//    return point_0;
+//}
 
 uint32_t SF_TS_GetInterpVal(TimePoint_Typedef timescale[], uint32_t ts_size, uint32_t time)
 {
 
-    uint32_t point_1 = SearchPoint1(timescale, ts_size, time);
-    if (point_1 < ts_size)
-    {
-        uint32_t point_0 = point_1 - 1;
-        return SF_LinInterp(time,
-                            timescale[point_0].t,
-                            timescale[point_0].val,
-                            timescale[point_1].t,
-                            timescale[point_1].val);
-    }
-    else
-    {
+//    uint32_t point_1 = SearchPoint1(timescale, ts_size, time);
+//    if (point_1 < ts_size)
+//    {
+//        uint32_t point_0 = point_1 - 1;
+//        return SF_LinInterp(time,
+//                            timescale[point_0].t,
+//                            timescale[point_0].val,
+//                            timescale[point_1].t,
+//                            timescale[point_1].val);
+//    }
+//    else
+//    {
         return -1; // timescale exceeded
-    }
+//    }
 
 }
 

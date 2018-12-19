@@ -12,10 +12,15 @@
  extern "C" {
 #endif
 /*                   */
+
 #include <stdint.h>
-#include "main.h"
+#include "main.h" // hal
 
-
+ typedef struct
+ {
+     uint32_t t;
+     uint32_t val;
+ } TimePoint_Typedef;
 
 void SF_InitDelay_us();
 void SF_Delay_us_blocking(uint32_t us);
