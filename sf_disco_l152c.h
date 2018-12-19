@@ -13,7 +13,7 @@ extern "C"
 {
 #endif
 /*                   */
-#include "main.h"
+#include "main.h" // hal
 #include <stdbool.h>
 
 #define GPIO_PIN_BLUE GPIO_PIN_6
