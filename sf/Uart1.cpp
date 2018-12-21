@@ -15,7 +15,7 @@ Uart1::Uart1()
     baudrate = 0;
     Pre_Init();
     Init();
-    Send("Hello");
+    Hello();
 }
 
 Uart1::Uart1(const uint32_t & spec_baudrate)
@@ -24,7 +24,7 @@ Uart1::Uart1(const uint32_t & spec_baudrate)
     baudrate = spec_baudrate;
     Pre_Init();
     Init();
-    Send("Hello");
+    Hello();
 }
 
 /**
@@ -52,6 +52,14 @@ void Uart1::SetBaudRate(uint32_t new_br)
     DIV = DIV_Mantissa + DIV_Fraction;
     USART1->BRR = DIV;
 
+}
+
+bool sf::Uart1::Hello()
+{
+    int n =1;
+    this->Send("\n\rHello...\n\r");
+    this->printf("... my developer!!%d\n\r", n);
+    return true;
 }
 
 Uart1::~Uart1()
@@ -108,14 +116,15 @@ bool Uart1::Send(const uint8_t & tx)
 
 void Uart1::Receive(string * rx_str)
 {
-
     
 }
 
 bool sf::Uart1::Pre_Init()
 {
-    __HAL_RCC_USART1_CLK_ENABLE();
-    __HAL_RCC_GPIOA_CLK_ENABLE();
+    __HAL_RCC_USART1_CLK_ENABLE()
+    ;
+    __HAL_RCC_GPIOA_CLK_ENABLE()
+    ;
     GPIO_InitTypeDef u1_pins;
     u1_pins.Pin = GPIO_PIN_9 | GPIO_PIN_10;
     u1_pins.Mode = GPIO_MODE_AF_PP;
@@ -130,4 +139,26 @@ bool sf::Uart1::Pre_Init()
 
 sf::Uart1::Uart1(const uint32_t& spec_baudrate, const uint8_t* rx_buf, const uint32_t& buf_size)
 {
+}
+
+int sf::Uart1::printf(const char* format, ...)
+{
+    char str[128];
+    char *s = str; // pointer for the buffer
+    int ch_count=0;
+
+    va_list args; // holds args
+    va_start(args, format); // format - last defined param name
+    vsprintf(str, format, args); // formatting
+
+    while (*s)
+    {
+        while (!(USART1->SR >> 7 & 1))
+            ; // while not TXE: Transmit data register empty
+        USART1->DR = *s;
+        s++;
+        ch_count++;
+    }
+    va_end(args);
+    return ch_count;
 }

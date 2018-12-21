@@ -10,6 +10,7 @@
 
 #include <stdint.h>
 #include <string>
+#include <stdarg.h>
 #include <math.h>
 #include "stm32l1xx.h"
 #include "stm32l1xx_hal_rcc.h"
@@ -29,6 +30,7 @@ namespace sf
         uint8_t * rx_buff_p;
         bool Init();
         bool Pre_Init();
+        bool Hello();
         bool Deinit();
         void SetBaudRate(uint32_t new_br);
 
@@ -39,6 +41,7 @@ namespace sf
               const uint8_t * rx_buf,
               const uint32_t & buf_size);
         void IRQ(bool rx, bool tx);
+        int printf(const char *format,...);
         bool Send(const string & tx_str);
         bool Send(const uint8_t & tx);
         void Receive(string * rx_str);
