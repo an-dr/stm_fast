@@ -12,8 +12,7 @@
 #include <string>
 #include <stdarg.h>
 #include <math.h>
-#include "stm32l1xx.h"
-#include "stm32l1xx_hal_rcc.h"
+#include "main.h" // cmsis, hal ...
 
 using namespace std;
 
@@ -28,8 +27,8 @@ namespace sf
     private:
         uint32_t baudrate;
         uint8_t * rx_buff_p;
-        bool Init();
         bool Pre_Init();
+        bool Init();
         bool Hello();
         bool Deinit();
         void SetBaudRate(uint32_t new_br);
@@ -37,9 +36,9 @@ namespace sf
     public:
         Uart1();
         Uart1(const uint32_t & spec_baudrate);
-        Uart1(const uint32_t & spec_baudrate,
-              const uint8_t * rx_buf,
-              const uint32_t & buf_size);
+//        Uart1(const uint32_t & spec_baudrate,
+//              const uint8_t * rx_buf,
+//              const uint32_t & buf_size);
         void IRQ(bool rx, bool tx);
         int printf(const char *format,...);
         bool Send(const string & tx_str);
