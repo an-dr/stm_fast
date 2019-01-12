@@ -35,7 +35,7 @@ void Uart1::SetBaudRate(uint32_t new_br)
     baudrate = new_br;
     float fck = HAL_RCC_GetSysClockFreq();
     uint32_t over8 = (USART1->CR1 >> USART_CR1_OVER8_Pos) & 1;
-    uint32_t new_brr;
+    uint32_t new_brr = 0;
     // BRR for STM32L1
 #   if defined( __STM32L1xx_H )
     float uart_div, uart_div_Fraction, uart_div_Mantissa;
